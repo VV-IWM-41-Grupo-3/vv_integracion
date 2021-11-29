@@ -32,7 +32,6 @@ public class SystemManager {
 	}
 
 	public Collection<Object> stopRemoteSystem(String userId, String remoteId) throws SystemManagerException {
-
 		final User auth = authDao.getAuthData(userId);
 		try {
 			Collection<Object> remote = dao.getSomeData(auth, "where id=" + remoteId);
