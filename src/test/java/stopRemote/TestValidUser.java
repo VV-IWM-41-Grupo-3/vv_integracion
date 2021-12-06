@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 
@@ -43,6 +44,26 @@ public class TestValidUser {
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
 		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
 		ordered.verify(mockGenericDao).getSomeData(validUser, "where id=" + validId);
+	}
+
+	@Test
+	public void testStopRemoteSystemWithValidUserInvalidSystem() throws Exception {
+		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
+
+		String invalidId = "12345";
+		ArrayList<Object> lista = new ArrayList<>(Arrays.asList("uno", "dos"));
+		when(mockGenericDao.getSomeData(validUser, "where id=" + invalidId)).thenReturn(null);
+
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+
+		Collection<Object> retorno = manager.stopRemoteSystem(validUser.getId(), invalidId);
+		assertNull(retorno);
+		//Poner en la memoria que se asume que se devuelve null en el caso de que el usuario sea válido y el sistema inválido ya que en la documentación no se especifica qué ocurre en este caso
+		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao).getSomeData(validUser, "where id=" + invalidId);
 	}
 
 }
