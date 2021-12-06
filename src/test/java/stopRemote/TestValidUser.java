@@ -61,7 +61,7 @@ public class TestValidUser {
 
 		Collection<Object> retorno = manager.stopRemoteSystem(validUser.getId(), invalidId);
 		assertNull(retorno);
-		//Poner en la memoria que se asume que se devuelve null en el caso de que el usuario sea válido y el sistema inválido ya que en la documentación no se especifica qué ocurre en este caso
+		//Poner en la memoria que se asume que se devuelve null en el caso que el usuario sea válido y el sistema inválido ya que en la documentación no se especifica qué ocurre en este caso
 		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
 		ordered.verify(mockGenericDao).getSomeData(validUser, "where id=" + invalidId);
 	}
