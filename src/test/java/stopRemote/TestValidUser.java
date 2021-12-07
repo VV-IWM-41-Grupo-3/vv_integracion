@@ -52,7 +52,6 @@ public class TestValidUser {
 		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
 
 		String invalidId = "12345";
-		ArrayList<Object> lista = new ArrayList<>(Arrays.asList("uno", "dos"));
 		when(mockGenericDao.getSomeData(validUser, "where id=" + invalidId)).thenReturn(null);
 
 		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
