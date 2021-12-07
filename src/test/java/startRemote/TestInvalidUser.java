@@ -48,7 +48,7 @@ public class TestInvalidUser {
         // llamada al api a probar
         Collection<Object> retorno = manager.startRemoteSystem(userId, validId);
         assertNull(retorno);
-        //Poner en la memoria que se asume que se devuelve null en el caso de que el usuario sea inválido y el sistema válido ya que en la documentación no se especifica qué ocurre en este caso
+        //Poner en la memoria que se asume que se devuelve null en el caso de que el usuario sea inválido y el sistema válido ya que en la documentación no se especifica qué ocurre en este caso, y se probó y no lanza la excepción
         // vemos si se ejecutan las llamadas a los dao, y en el orden correcto
         ordered.verify(mockAuthDao).getAuthData(userId);
         ordered.verify(mockGenericDao).getSomeData(invalidUser, "where id=" + validId);
@@ -61,7 +61,6 @@ public class TestInvalidUser {
         lenient().when(mockAuthDao.getAuthData(userId)).thenReturn(null);
 
         String invalidId = "12345";
-        ArrayList<Object> lista = new ArrayList<>(Arrays.asList("uno", "dos"));
         when(mockGenericDao.getSomeData(invalidUser, "where id=" + invalidId)).thenReturn(null);
 
         InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
