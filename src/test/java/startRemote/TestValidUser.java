@@ -57,14 +57,14 @@ public class TestValidUser {
 
 		String invalidId = "12345";
 		when(mockGenericDao.getSomeData(validUser, "where id=" + invalidId)).thenReturn(null);
-
+		//Poner en la memoria que se asume que se devuelve null en el caso de que el usuario sea válido y el sistema inválido ya que en la documentación no se especifica qué ocurre en este caso
 		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
 
 		Collection<Object> retorno = manager.startRemoteSystem(validUser.getId(), invalidId);
 		assertNull(retorno);
-		//Poner en la memoria que se asume que se devuelve null en el caso de que el usuario sea válido y el sistema inválido ya que en la documentación no se especifica qué ocurre en este caso
+
 		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
 		ordered.verify(mockGenericDao).getSomeData(validUser, "where id=" + invalidId);
 	}
