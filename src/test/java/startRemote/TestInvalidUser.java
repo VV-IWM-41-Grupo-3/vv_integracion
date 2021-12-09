@@ -38,7 +38,6 @@ public class TestInvalidUser {
         Mockito.lenient().when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
 
         String validId = "12345";
-        // autor null porque es lo que devuelve getAuthData al mockearlo
         Mockito.lenient().when(mockGenericDao.getSomeData(null, "where id=" + validId)).thenThrow(OperationNotSupportedException.class);
 
         InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
