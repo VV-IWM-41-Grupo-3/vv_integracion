@@ -52,21 +52,21 @@ public class TestInvalidUser {
 	}
 
 	@Test
-	public void testAddRemoteSystemInvalidSystemValidUser() throws Exception{
-		String validSystem = "123";
+	public void testAddRemoteSystemInvalidSystemInvalidUser() throws Exception{
+		String invalidSystem = "123";
 		User invalidUser = new User ("11","David","Martín","Madrid", new ArrayList<Object>(Arrays.asList(1,2)));
 		when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
-		when(mockGenericDao.updateSomeData(null, validSystem)).thenThrow(OperationNotSupportedException.class);
+		when(mockGenericDao.updateSomeData(null, invalidSystem)).thenThrow(OperationNotSupportedException.class);
 
 		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
 		assertThrows(SystemManagerException.class, () -> {
-			manager.addRemoteSystem(invalidUser.getId(),"123");
+			manager.addRemoteSystem(invalidUser.getId(),invalidSystem);
 		});
 
 		ordered.verify(mockAuthDao).getAuthData(invalidUser.getId());
-		ordered.verify(mockGenericDao, times(1)).updateSomeData(null, "123");
+		ordered.verify(mockGenericDao, times(1)).updateSomeData(null, invalidSystem);
 		//como el usuario no es válido da igual el objeto que quieras cambiar -> no lo comprueba
 	}
 }
