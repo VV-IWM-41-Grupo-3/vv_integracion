@@ -1,5 +1,5 @@
 # Verificación y Validación del Software 2021
-GRUPO IWM - 41 - GRUPO 3
+## IWM-41 - GRUPO 3
 
 ## Instrucciones para utilizar este proyecto
 
