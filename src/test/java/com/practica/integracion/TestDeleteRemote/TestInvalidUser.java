@@ -28,37 +28,31 @@ public class TestInvalidUser {
 	AuthDAO mockAuthDao;
 
 	@Test
-	public void testDeleteUserInvalidGood() throws OperationNotSupportedException {
+	public void testDeleteUserInvalidGood() throws OperationNotSupportedException, SystemManagerException {
 		User invalidUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
-		//lenient().when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
-		//Por la implementación del método, esto no se utiliza ya que no hace la llamada
-		//Al metodo de verificacion
+		lenient().when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
 		String validId = "12345";
-		lenient().when(mockGenericDao.deleteSomeData(null, validId)).thenThrow(OperationNotSupportedException.class);
-		InOrder ordered = inOrder(mockGenericDao);
+		lenient().when(mockGenericDao.deleteSomeData(null, validId)).thenReturn(false);
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
 		Assertions.assertThrows(SystemManagerException.class, () ->{
 			manager.deleteRemoteSystem(invalidUser.getId(), validId);
 		});
-		//ordered.verify(mockAuthDao).getAuthData(invalidUser.getId());
-		//Lo mismo pasa con esta linea
+		ordered.verify(mockAuthDao).getAuthData(invalidUser.getId());
 		ordered.verify(mockGenericDao).deleteSomeData(null, validId);
 	}
 	@Test
 	public void testDeleteUserInvalidBad() throws OperationNotSupportedException {
 		User invalidUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
-		//lenient().when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
-		//Por la implementación del método, esto no se utiliza ya que no hace la llamada
-		//Al metodo de verificacion
+		lenient().when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
 		String validId = "12345";
 		lenient().when(mockGenericDao.deleteSomeData(null, validId)).thenThrow(OperationNotSupportedException.class);
-		InOrder ordered = inOrder(mockGenericDao);
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
 		Assertions.assertThrows(SystemManagerException.class, () ->{
 			manager.deleteRemoteSystem(invalidUser.getId(), validId);
 		});
-		//ordered.verify(mockAuthDao).getAuthData(invalidUser.getId());
-		//Lo mismo pasa con esta linea
+		ordered.verify(mockAuthDao).getAuthData(invalidUser.getId());
 		ordered.verify(mockGenericDao).deleteSomeData(null, validId);
 	}
 
